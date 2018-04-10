@@ -2,7 +2,7 @@
 
 Since the 3.20.0.1 release H2O supports Hive as a possible data source through the JDBC driver. As a part of that a performance test was conducted comparing ingestion of data from CSV file on HDFS and Hive DB.
 
-This post describes how to set up the environment and run the comparisson. 
+This post describes how to set up the environment and run the comparison. 
 
 ## Setting up cluster
 A guide can be found [here](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-gs.html).
@@ -16,7 +16,7 @@ On your local machine remove access on the private key (.pem file) to only have 
 **Note:** Remember to reset the cluster to avoid extra charges like  [here]([https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-gs-reset-environment.html).
 
 ## Data
-It makes sense to use some data that corresponds to your usecase. We have used a data set of first 10k rows of airlines data from [here](https://s3.amazonaws.com/h2o-public-test-data/smalldata/airlines/AirlinesTest.csv.zip) and then created semi synthetic data by repeating the pattern as needed (see script below). 
+It makes sense to use some data that corresponds to your use case. We have used a data set of first 10k rows of airlines data from [here](https://s3.amazonaws.com/h2o-public-test-data/smalldata/airlines/AirlinesTest.csv.zip) and then created semi synthetic data by repeating the pattern as needed (see script below). 
 
 ### Create data
 Upload the `10k.csv` (10k rows without header), `header.csv` (just one header row) to the EMR master. To store files locally run the script from `/mnt/s3` as there is enough space:
