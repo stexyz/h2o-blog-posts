@@ -318,9 +318,9 @@ run:
 Results:
 --------
 
-Let me recap the measurement again: **System:** EMR cluster of 6 M4
-large machines (2CPUs, 8GB mem). **H2O Cluster:** 3 nodes with 5GB mem
-each.
+Let me recap the measurement again: \* **System:** EMR cluster of 6 M4
+large machines (2CPUs, 8GB mem). \* **H2O Cluster:** 3 nodes with 5GB
+mem each.
 
 Comparing CSV import from HDFS vs import of the same data from Hive DB.
 
