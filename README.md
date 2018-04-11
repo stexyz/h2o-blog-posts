@@ -69,11 +69,13 @@ wc data100M.csv
 ```
 #!/bin/bash
 hdfs dfs -mkdir /user/hadoop/10k
-hdfs dfs -put /user/hadoop/10k/data10k.csv
+hdfs dfs -put data10k.csv /user/hadoop/10k/data10k.csv
 hdfs dfs -mkdir /user/hadoop/1M
-hdfs dfs -put /user/hadoop/1M/data1M.csv
+hdfs dfs -put data1M.csv /user/hadoop/1M/data1M.csv
+hdfs dfs -mkdir /user/hadoop/10M
+hdfs dfs -put data10M.csv /user/hadoop/10M/data10M.csv
 hdfs dfs -mkdir /user/hadoop/100M
-hdfs dfs -put /user/hadoop/100M/data100M.csv
+hdfs dfs -put data100M.csv /user/hadoop/100M/data100M.csv
 ```
 ### Create anonymous home on HDFS (to run queries)
 To be able to run Hive queries we need to create home folder for the anonymous user on HDFS.
@@ -116,21 +118,31 @@ A detailed description can be found [here](http://docs.h2o.ai/h2o/latest-stable/
 sudo ln -s /usr/local/bin/pip /usr/bin/pip
 sudo ln -s /usr/local/bin/pip2 /usr/bin/pip2
 sudo ln -s /usr/local/bin/pip2.7 /usr/bin/pip2.7
-pip install requests
-pip install tabulate
-pip install scikit-learn
-pip install colorama
-pip install future
-pip install -f http://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o
+sudo pip install --upgrade pip
+#now you may face problems with cached location of pip - either open new terminal or call:
+hash -r
+#now install dependencies
+sudo pip install requests
+# in case requests were already intalled
+sudo pip2 install --upgrade requests
+sudo pip install tabulate
+sudo pip install scikit-learn
+sudo pip install colorama
+sudo pip install future
+
+sudo pip install -f http://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o
 ```
 
 ## Import data to H2O
-The JDBC driver is at `/usr/lib/hive/jdbc/hive-jdbc-2.3.2-amzn-1-standalone.jar`.
+The JDBC driver is at `/usr/lib/hive/jdbc/hive-jdbc-2.3.2-amzn-1-standalone.jar`; the version may differ.
 
 ### H2O Cluster
 To run H2O in cluster we need the `h2odriver.jar`. As for Apr 2018, EMR works well with [HDP 2.6](http://h2o-release.s3.amazonaws.com/h2o/rel-wolpert/5/h2o-3.18.0.5-hdp2.6.zip
 ) version of H2O driver.
-`wget http://h2o-release.s3.amazonaws.com/h2o/rel-wolpert/5/h2o-3.18.0.5-hdp2.6.zip`
+```
+wget http://h2o-release.s3.amazonaws.com/h2o/rel-wolpert/5/h2o-3.18.0.5-hdp2.6.zip
+unzip h2o-3.18.0.5-hdp2.6.zip
+```
 
 Max memory for the 8GB machines that was available for H2O was 5G.
 `hadoop jar h2o-3.18.0.5-hdp2.6/h2odriver.jar -libjars /usr/lib/hive/jdbc/hive-jdbc-2.3.2-amzn-1-standalone.jar -nodes 3 -mapperXmx 5g`
@@ -183,6 +195,47 @@ print 'HDFS: the import of 10k rows from CSV/HDFS took', end10kcsv-start10kcsv,'
 print '================results for 10k rows==============='
 ```
 
+### Java Signle Threaded Test
+To come with a non-biased baseline values we've used a single threaded Java app connecting to the Hive server and reading all lines one by one while discarding them. 
+```
+import java.sql.*;
+public class TestHive {
+   private static String driverName = "org.apache.hive.jdbc.HiveDriver";
+   public static void main(String[] args) throws SQLException{
+     System.out.println("\n Accessing database:" + args[0] + ".");
+     try {
+         Class.forName(driverName);
+     } catch (ClassNotFoundException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+         System.exit(1);
+     }
+
+        Connection con = DriverManager.getConnection("jdbc:hive2://172.31.39.155:10000/default", "hive", "");
+        Statement stmt = con.createStatement();
+
+        String sql = ("select * from "+ args[0]);
+        long startTime = System.currentTimeMillis();
+        System.out.println("====Test started====");
+        ResultSet res = stmt.executeQuery(sql);
+        long count = 0;
+        while (res.next()){
+            count++;
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Duration of the test: "+ (endTime - startTime)/1000 + "s. Total # of rows:" + count );
+        System.out.println("====Test finished====");
+        DatabaseMetaData md = con.getMetaData();
+        System.out.println("\nhive version:" + md.getDatabaseMajorVersion() + "." + md.getDatabaseMinorVersion());
+   }
+}
+```
+To run the test specify the DB name as a parameter: `java -cp /usr/lib/hive/jdbc/hive-jdbc-2.3.2-amzn-2-standalone.jar:. TestHive db10k`
+
+### Getting H2O Logs
+You may want to store the logs from H2O for later analysis; After killing the H2O cloud find a line like this at the end of H2O cluster run:
+`For YARN users, logs command is 'yarn logs -applicationId application_1523437059539_0004'`
+
 ## Results:
 
 Let me recap the measurement again:
@@ -191,12 +244,12 @@ Let me recap the measurement again:
 
 Comparing CSV import from HDFS vs import of the same data from Hive DB.
 
-Data [rows] | CSV import [s] | Hive import [s]
-------------|----------------|----------------
-10000 | 2.6 | 20.6
-1000000 | 6.8 | 35.3
-10000000 | 14.8 | 121.0
-100000000 | 100 | DNF (memory pressure*)
+Data [rows] | CSV import [s] | Hive import [s]       | Java 1Thread[s]
+------------|----------------|-------------------------------------
+     10,000	|			 2.6 | 			        20.6 | 			0
+  1,000,000	|			 6.8 |		            35.3 |			7
+ 10,000,000	| 			14.8 |       		   121.0 |		   61
+100,000,000	| 			 100 | DNF (memory pressure*)|		  605
 
 (* the import of 100M rows took aprox 20 minutes to finish to 100% state in console, but slowed down due to mem.pressure (swapping and GC records in log)); should use more memory on the H2O cluster for such large data sets.
 

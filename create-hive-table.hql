@@ -1,0 +1,15 @@
+CREATE TABLE `sys`.`AirlinesTest` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `fYear` VARCHAR(45) NULL,
+  `fMonth` VARCHAR(45) NULL,
+  `fDayofMonth` VARCHAR(45) NULL,
+  `fDayOfWeek` VARCHAR(45) NULL,
+  `DepTime` INT NULL,
+  `ArrTime` INT NULL,
+  `UniqueCarrier` VARCHAR(45) NULL,
+  `Origin` VARCHAR(45) NULL,
+  `Dest` VARCHAR(45) NULL,
+  `Distance` INT NULL,
+  `IsDepDelayed` VARCHAR(45) NULL,
+  `IsDepDelayed_REC` INT NULL,
+  PRIMARY KEY (`id`));
