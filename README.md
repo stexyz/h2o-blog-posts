@@ -245,7 +245,7 @@ Let me recap the measurement again:
 Comparing CSV import from HDFS vs import of the same data from Hive DB.
 
 Data [rows] | CSV import [s] | Hive import [s]       | Java 1Thread[s]
-------------|----------------|-------------------------------------
+------------|----------------|-----------------------|----------------
      10,000	|			 2.6 | 			        20.6 | 			0
   1,000,000	|			 6.8 |		            35.3 |			7
  10,000,000	| 			14.8 |       		   121.0 |		   61
