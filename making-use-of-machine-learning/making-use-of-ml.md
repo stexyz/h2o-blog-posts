@@ -62,28 +62,28 @@ We've talked about application metrics but the principles of prudent management 
 
 ## Bringing the Model to Production
 
-## Multi-tenant Environment
+### Multi-tenant Environment
 Many enterprises serve multiple tenants at once. It is important to distinguish between the cases where different tenants can benefit from using a common machine learning model trained on a joined data set and the case where such approach may lead to suboptimal results mainly in accuracy. Legal impact of such trade-off often conditions the possibility of such optimisation.
 
-## Integration of Scoring Logic
+### Integration of Scoring Logic
 It is impossible to forsee all the different flavours of scoring logic integration. Underestimating the proper planing of integration has lead to the situation where productisation of great machine learning models has taken significantly longer than the actual model development.
 H2O has had this in mind for long time understanding that a trained model itself has to be as agile in ways it can be deployed as possible providing the user of its platform with large number of ways the deployment can be carried out.
 
 As we will focus on each one of them in further posts, let's merely list them here. One vital characteristic common to all of the deployment flavours is the self-containdness of the scoring logic not needing any H2O server-like infrastructure.
 
-### Bash-like file->file
+#### Bash-like file->file
 A stand-alone scoring invokable on an operating system process level. Easy to operate by UNIX(-like) system admin tools like Cron.
 
-### Micro Service
+#### Micro Service
 Several different implementations of a self-hosted (RESTful) service with JSON/binary content. Both on-premise and cloud.
 
-### AWS Lambda
+#### AWS Lambda
 Scalable one-click deployment (possibly API-automated) to AWS Lambda.
 
-### Code Embedded Scoring
+#### Code Embedded Scoring
 Runtime libraries callable from JVM languages, Python, C++ and C# offering code-level integration with model being decoupled from runtime libraries.
 
-### Spark
+#### Spark
 Library allowing utilisation of H2O models as native Spark pipelines operating on Spark data structures. **TODO: validate wording with Kuba Hava.**
 
 ## Environment Restrictions
