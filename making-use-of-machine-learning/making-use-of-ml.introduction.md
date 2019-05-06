@@ -1,14 +1,15 @@
 # Making Use of Machine Learning
 
-So you've trained a model which performs well in your validation schema. 
+So you've built a machine learning model which delivers a high level of accuracy and does not overfit. 
+What value does it have now? Well at the moment, nothing, zero, diddly squat. Over a series of blogs that I plan to write then the motto of all them will be: "There is no economic value in a model that is not used in production." 
 
-What value does it have now? The motto of this series is: "There is no value (at least economic) in a model that is not used in production." 
+So how can data scientist cover the "last mile" to the end zone named production? How do we quickly make the most of the model that has been built? For many organisations this is the toughest nut to crack and there are many valid paths that can be taken to deployment. I will be exploring many of these over my subsequent posts, drawing on experience and solutions that I have gleaned from working with many customers at my current employee, H2O.ai. However, first things first. What questions should we be asking to determine the path we should take? They are built on a foundation centred around xxx pillars. These are
 
-How can one cover the "last mile" to the end zone named production? How to make most of the model? We will have a look at this in this series of posts.
-
-But, first things first. There are questions we have to ask ourselves that determine our further path. That will be the topic of this post.
-
-Further in the series we will visit all the possible deployment scenarios for machine learning models. Throughout this series I will be using solutions from H2O.ai, however, the concepts should be aplicable to all mature machine learning platforms.
+1. Data source and format
+2. Model and data lifecycle
+3. How To Measure Success
+4. Bringing the Model to Production
+5. External Limitations Restrictions
 
 **TODO**: mention 'lessions learned'
 **TODO**: moto2: treat your machine learning models like other software components. (testing/monitoring/deployment)
@@ -22,6 +23,10 @@ For the model training, is the data source reachable from the machines where it 
 Make sure that the storage system is compatible with the connectors available in the ML platform and the data format well supported. It may look trivial to change the representation and location of your data sets when experimenting with sample small data sets but all changes with volume. Lastly, make sure that the data set size fits - many claim to be *big data ready*, few really are. No matter the power of the machine learning solution be sure you know that you're not including data that is clearly irrelevant.
 
 How to measure data set size? Both physical size (GBs) and the number of rows and colums pose computational challenge to the machine learning task. Be aware that both columns and rows may be sampled to decrease the required run time.
+
+**TODO**: one size fits all? do you need a scaling solution that require more admin?
+**TODO**: network accessibility of data and problems with locality (oversees transfers)
+**TODO**: data sink - where do the predictions go?
 
 ## Model and Data Lifecycle
 
@@ -39,7 +44,10 @@ There is litte value in storing just the plain model, meta data describing the p
 No matter what you do you, by the end of the day you should be able to tell a success from a failure. Beauty may be found in all things, let us, however, look at more objective metrics.
 
 ### Model Testing and Other Metrics
-There is just one model quality and it is how well it performs in production. Sadly, we have to design and select the right model before we see it shine or fail in deployment. Therefore we try to measure the performance in the testing phase as good as possible.  
+There is just one model quality and it is how well it performs in production. Sadly, we have to design and select the right model before we see it shine or fail in deployment. Therefore we try to measure the performance in the testing phase as good as possible.
+
+**TODO**: following is totally wrong: any of the following may be crutial - scorer metric, stability of the model (sensitivity), latency, throughput etc.. -> rephrase!!
+
 Clearly, the prime metric is the accuracy measured by our scorer of choice. From experience we need to come up with a requirement of such score that will determine whether we've managed to build a model that is likely to be good enough to bring value when replacing the current model in production. If we have no model in production, we just try our best.
 In some cases, however, a mix of KPIs need to be met. 
 For online business or low latency trading we need good predictions being computed within a given time period otherwise they become obsolete.
@@ -55,10 +63,13 @@ If the KPIs do not fall within expected value range what do we do? We can keep a
 
 On top of the metrics we also may want to generate metadata documenting what input has been seen, which values were unknown to the models (unseen categorical values, invalid input or even run time errors). We need to decide if this information needs to be processed real-time to trigger some imediate actions or offline batch recording is enough for later post-mortem analysis. This may results in substantial architetural desisions.
 
+**TODO**: add model drift, think of other things that can go wrong
+
 ### Resource Utilisation
 We've talked about application metrics but the principles of prudent management of the assets command us also to monitor the usage of resources. The consumption of resources is dynamic figure and for serious business case excessive hardware sizing should be avoided as well as growing consumption should trigger operations team to increase the resource pool prior to facing sudden drop in performance due to lack of resources.
 
-**TODO: mention the flavor of batch/mini-batch/stream scoring approach.**
+### Model Fairness
+### Model Interpretability
 
 ## Bringing the Model to Production
 
@@ -69,7 +80,9 @@ Many enterprises serve multiple tenants at once. It is important to distinguish 
 It is impossible to forsee all the different flavours of scoring logic integration. Underestimating the proper planing of integration has lead to the situation where productisation of great machine learning models has taken significantly longer than the actual model development.
 H2O has had this in mind for long time understanding that a trained model itself has to be as agile in ways it can be deployed as possible providing the user of its platform with large number of ways the deployment can be carried out.
 
-As we will focus on each one of them in further posts, let's merely list them here. One vital characteristic common to all of the deployment flavours is the self-containdness of the scoring logic not needing any H2O server-like infrastructure.
+As we will focus on each one of them in further posts, let's merely list them here. 
+
+One vital characteristic common to all of the deployment flavours is the self-containdness of the scoring logic not needing any H2O server-like infrastructure.
 
 #### Bash-like file->file
 A stand-alone scoring invokable on an operating system process level. Easy to operate by UNIX(-like) system admin tools like Cron.
@@ -86,7 +99,7 @@ Runtime libraries callable from JVM languages, Python, C++ and C# offering code-
 #### Spark
 Library allowing utilisation of H2O models as native Spark pipelines operating on Spark data structures. **TODO: validate wording with Kuba Hava.**
 
-## Environment Restrictions
+## External Limitations Restrictions
 In simple words - what was possible in the R&D lab may be a very serious problem in the target environment.
 
 ### Priviledged Access
@@ -95,7 +108,8 @@ A very unpleasant discovery may be a need of priviledged access to run scoring l
 ### Hermetic Environment
 Access to sensitive data may require a hermetically closed environment without access to the internet or other sources of dependencies. Lazily resolved dependencies or just model deployment process requiring an online dependency resolution may not be available and missed deadlines may occur during fixing this issue.
 
-# Concerns during Modeling Phase
-**TODO: not sure if this should be part of this post**.
-## Algorithm Limitation
+### IT limitations 
+* access across different network partitions - data->training, data->scoring->sink, UI access to modelling environment
+
+### Legal Limitation
 NNs and other methods may not be available due to regulatory reasons. Make sure that even law department is part of the inception discussions to mitigate such risks.
