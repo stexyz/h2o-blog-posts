@@ -1,31 +1,30 @@
 # Making Use of Machine Learning
 
-So you've built a machine learning model which delivers a high level of accuracy and does not overfit. 
-What value does it have now? Well, at the moment, nothing, zero, diddly squat. Over a series of blogs that I plan to write then the motto of all them will be: "There is no economic value in a model that is not used in production." 
+So you've built a machine learning (ML) model which delivers a high level of accuracy and does not overfit. 
+What value does it have now? Well, at the moment, nothing, zero, diddly squat. Over a series of blogs that I plan to write then the motto of all them will be: "There is no economic value in a machine learning model that never sees the light of day and is not used in production making business decisions." 
 
-So how can data scientist cover the "last mile" to the end zone named production? How do we quickly make the most of the model that has been built? For many organisations this is the toughest nut to crack and there are many valid paths that can be taken to deployment. I will be exploring many of these over my subsequent posts, drawing on experience and solutions that I have gleaned from working with many customers at my current employee, H2O.ai. However, first things first. What questions should we be asking to determine the path we should take? They are built on a foundation centred around 4 pillars. These are
+So how can data scientists cover the "last mile" to that elusive end zone that is named production? How do we quickly make the most of the model that has been built? For many organisations this is the toughest nut to crack and there are many valid paths that can be taken to deployment. We will be exploring many of these over our subsequent posts, drawing on years of experience and solutions that we have gleaned from working with many customers. However, first things first. What questions should we be asking to determine the path we should take? They are built on a foundation centred around 4 pillars. These are
 
-1. Data Source and Format
+1. Data Sources and their format
 2. How To Measure Success
 3. Bringing the Model to Production
 4. External Limitations and Restrictions
 
-## Data Source and Format
+## Data Sources and their format
 
-Will the same data with the same structure be available in production when predictions will be computed? 
+Some of the key questions and pointers that need to be asked are:
 
-Is the data source and prediction destination reachable from the machines where it will be ingested by the ML framework? One of the most common *show stoppers* in enterprise environment is the lack of network access, low bandwidth and long roundtrip (don't repeatedly transfer big data sets over the ocean) of your data and among systems involved. Solving these problems may take long weeks and substantial effort so plan and test and involve IT ahead of time.
+- Will the same data with the same structure be available in production when the predictions are calculated? 
 
-Make sure that the storage system is compatible with the connectors available in the ML platform and the data format is well supported. It may look trivial to change the representation and location of your data sets when experimenting with sample small data but all changes with volume. 
+- Is the data source and prediction destination reachable from the machines where it will be ingested by the ML framework? One of the most common *show stoppers* in an enterprise environment is the lack of network access, low bandwidth and a long roundtrip (don't repeatedly transfer big data sets over the ocean) of your data and among systems involved. Solving these problems may take long weeks and substantial effort so plan and test and involve IT ahead of time.
 
-Lastly, make sure that the *ML framework fits the data set size*. Avoid the lure of using heavy-duty frameworks for simple problems but also beware that many claim to be *big data ready*, few really are. 
-No matter the power of the machine learning solution be sure you know that you're not including possibly large burden of data that is clearly irrelevant.
+- Make sure that the storage system is compatible with the connectors available in the ML platform and the data format is well supported. It may look trivial to change the representation and location of your data sets when experimenting with sample small data but all changes when you start increasing the volume of your data. 
 
-How to measure data set size? Both physical size (GBs) and the number of rows and columns pose computational challenge to the machine learning task. Columns and rows downsampling may be required to decrease the required run time, proper EDA and preliminary modelling may let you reduce the data set too.
+Lastly, make sure that the *ML framework fits the data set size*. Avoid the lure of using heavy-duty frameworks for simple problems but also beware that many claim to be *big data ready*, few really are.  No matter the power of the machine learning solution, you need to make sure that you're not including a possibly large burden of data that is not necessary as part of the scoring process.  Measuring data set size is important. Both the physical size (GBs) and the number of rows and columns pose computational challenge to the machine learning task. Columns and rows downsampling may be required to decrease the required run time, proper exploratory data analysis and preliminary modelling may let you reduce the data set too.
 
 ## How to Measure Success
 
-No matter what you do you, by the end of the day you should be able to tell a success from a failure. Beauty may be found in all things, let us, however, look at some more objective metrics.
+No matter what you do you, at the end of the day you should be able to tell a successfrom a failure. Beauty may be found in all things, however let us consider some more objective metrics.
 
 ### Translate to Business
 Are you able to express the expectations of the non-technical consumer of your ML models to be built in a formalised way using standard ML metrics?
