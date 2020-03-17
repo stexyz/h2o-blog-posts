@@ -1,6 +1,6 @@
 # Making Use of Machine Learning
 
-So you've built a machine learning (ML) model which delivers a high level of accuracy and does not overfit. 
+So you have built a machine learning (ML) model which delivers a high level of accuracy and does not overfit. 
 What value does it have now? Well, at the moment, nothing, zero, diddly squat. Over a series of blogs that I plan to write then the motto of all them will be: "There is no economic value in a machine learning model that never sees the light of day and is not used in production making business decisions." 
 
 So how can data scientists cover the "last mile" to that elusive end zone that is named production? How do we quickly make the most of the model that has been built? For many organisations this is the toughest nut to crack and there are many valid paths that can be taken to deployment. We will be exploring many of these over our subsequent posts, drawing on years of experience and solutions that we have gleaned from working with many customers. However, first things first. What questions should we be asking to determine the path we should take? They are built on a foundation centred around 4 pillars. These are
