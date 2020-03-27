@@ -72,6 +72,8 @@ We've talked about application metrics but the principles of prudent management 
 =======
 >>>>>>> Edited How to Measure Success.
 
+![How to Measure Success](./images/03_how_to_measure_success.png)
+
 ## Bringing the Model to Production
 
 ### Multi-tennant Environment
@@ -85,6 +87,7 @@ Like with other assets, there is a good reason to keep old models archived and v
 
 ### Integration of Scoring Logic
 It is impossible to foresee all the different flavours of scoring logic integration. Underestimating the proper planning of integration has led to the situation where productionisation of great machine learning models has taken significantly longer than the actual model development.
+<<<<<<< HEAD
 
 H2O.ai has had this in mind for a long time. We understand that a trained model itself has to be as agile as possible providing the user of its platform with a large number of ways the deployment can be carried out. One vital characteristic common to all of the deployment flavours is the self-containedness of the scoring logic not needing any H2O.ai server-like infrastructure.
 
@@ -98,6 +101,21 @@ In further posts we will expand on these deployment patterns so here is a list o
 * (Near) real-time scoring with stream processing systems like Kafka or Flink
 * Spark Pipelines deployment utilising H2O.ai models as native Spark pipelines operating on Spark data structures
 
+=======
+
+H2O.ai has had this in mind for a long time. We understand that a trained model itself has to be as agile as possible providing the user of its platform with a large number of ways the deployment can be carried out. One vital characteristic common to all of the deployment flavours is the self-containedness of the scoring logic not needing any H2O.ai server-like infrastructure.
+
+In further posts we will expand on these deployment patterns so here is a list of them in no particular order:
+
+* Bash-like file->file stand-alone scoring invokable on an operating system process level operable by UNIX(-like) system admin tools like Cron
+* Batch scoring of data within a database (RDBMS, Hadoop, NoSQL, …)
+* Micro Service spanning across several different implementations of a self-hosted (RESTful) service with JSON/binary content both on-premise and cloud
+* Automated deployment to one of the scalable cloud services like AWS Lambda
+* Tight code-level integration with the ML models by embedding the scoring logic using runtime libraries decoupled from the actual model being served as run-time dependency in form of a data file
+* (Near) real-time scoring with stream processing systems like Kafka or Flink
+* Spark Pipelines deployment utilising H2O.ai models as native Spark pipelines operating on Spark data structures
+
+>>>>>>> Edited Bringing the Model to Production.
 ![Bringing the Model to Production](./images/04_model_deployment.png)
 
 ## External Limitations and Restrictions
