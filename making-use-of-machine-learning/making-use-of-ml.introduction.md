@@ -53,15 +53,24 @@ To further mitigate the risk of a new model roll-out have you considered A/B tes
 
 ### Model Monitoring
 To ensure that our model keeps performing reasonably well in production we need to monitor the same qualities as we have in the lab. A model only understands the patterns from the data it was trained from.  As data patterns and data values change what is the impact on the quality of results being inferred from the model?
+<<<<<<< HEAD
 
 Does the data change substantially compared to our training data set? If other KPIs fall outside an expected value range what do we do? We can keep a back-up older model in place to fall back to and/or have some simpler backup system ready (like your old pre-machine learning rule based model). It is always a good practice to use the standard dev-ops alerts that are very likely to be implemented for the application using the machine learning model.
 
+=======
+
+Does the data change substantially compared to our training data set? If other KPIs fall outside an expected value range what do we do? We can keep a back-up older model in place to fall back to and/or have some simpler backup system ready (like your old pre-machine learning rule based model). It is always a good practice to use the standard dev-ops alerts that are very likely to be implemented for the application using the machine learning model.
+
+>>>>>>> Edited How to Measure Success.
 On top of the metrics, we also may want to generate metadata documenting what input has been seen, which values were unknown to the models (unseen categorical values, invalid input or even run time errors). We need to decide if this information needs to be processed in real-time to trigger some immediate actions or offline batch recording is enough for later post-mortem analysis. Do you have some proven logging sink or journals in place? Use these over adding new destinations of your records.
 
 ### Resource Utilisation
 We've talked about application metrics but the principles of prudent management of the assets command us also to monitor the usage of resources such as compute, memory, and storage. The consumption of resources is extremely variable and very use case specific.  For serious business cases, it is prudent to avoid excessive hardware sizing.  On the other hand, if models are seeing an increase in consumption then this should trigger the operations team to increase the resource pool.  This would prevent a sudden drop in performance occuring due to the lack of resources.
+<<<<<<< HEAD
 
 ![How to Measure Success](./images/03_how_to_measure_success.png)
+=======
+>>>>>>> Edited How to Measure Success.
 
 ## Bringing the Model to Production
 
