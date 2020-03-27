@@ -53,24 +53,13 @@ To further mitigate the risk of a new model roll-out have you considered A/B tes
 
 ### Model Monitoring
 To ensure that our model keeps performing reasonably well in production we need to monitor the same qualities as we have in the lab. A model only understands the patterns from the data it was trained from.  As data patterns and data values change what is the impact on the quality of results being inferred from the model?
-<<<<<<< HEAD
 
 Does the data change substantially compared to our training data set? If other KPIs fall outside an expected value range what do we do? We can keep a back-up older model in place to fall back to and/or have some simpler backup system ready (like your old pre-machine learning rule based model). It is always a good practice to use the standard dev-ops alerts that are very likely to be implemented for the application using the machine learning model.
 
-=======
-
-Does the data change substantially compared to our training data set? If other KPIs fall outside an expected value range what do we do? We can keep a back-up older model in place to fall back to and/or have some simpler backup system ready (like your old pre-machine learning rule based model). It is always a good practice to use the standard dev-ops alerts that are very likely to be implemented for the application using the machine learning model.
-
->>>>>>> Edited How to Measure Success.
 On top of the metrics, we also may want to generate metadata documenting what input has been seen, which values were unknown to the models (unseen categorical values, invalid input or even run time errors). We need to decide if this information needs to be processed in real-time to trigger some immediate actions or offline batch recording is enough for later post-mortem analysis. Do you have some proven logging sink or journals in place? Use these over adding new destinations of your records.
 
 ### Resource Utilisation
 We've talked about application metrics but the principles of prudent management of the assets command us also to monitor the usage of resources such as compute, memory, and storage. The consumption of resources is extremely variable and very use case specific.  For serious business cases, it is prudent to avoid excessive hardware sizing.  On the other hand, if models are seeing an increase in consumption then this should trigger the operations team to increase the resource pool.  This would prevent a sudden drop in performance occuring due to the lack of resources.
-<<<<<<< HEAD
-
-![How to Measure Success](./images/03_how_to_measure_success.png)
-=======
->>>>>>> Edited How to Measure Success.
 
 ![How to Measure Success](./images/03_how_to_measure_success.png)
 
@@ -87,7 +76,6 @@ Like with other assets, there is a good reason to keep old models archived and v
 
 ### Integration of Scoring Logic
 It is impossible to foresee all the different flavours of scoring logic integration. Underestimating the proper planning of integration has led to the situation where productionisation of great machine learning models has taken significantly longer than the actual model development.
-<<<<<<< HEAD
 
 H2O.ai has had this in mind for a long time. We understand that a trained model itself has to be as agile as possible providing the user of its platform with a large number of ways the deployment can be carried out. One vital characteristic common to all of the deployment flavours is the self-containedness of the scoring logic not needing any H2O.ai server-like infrastructure.
 
@@ -101,21 +89,6 @@ In further posts we will expand on these deployment patterns so here is a list o
 * (Near) real-time scoring with stream processing systems like Kafka or Flink
 * Spark Pipelines deployment utilising H2O.ai models as native Spark pipelines operating on Spark data structures
 
-=======
-
-H2O.ai has had this in mind for a long time. We understand that a trained model itself has to be as agile as possible providing the user of its platform with a large number of ways the deployment can be carried out. One vital characteristic common to all of the deployment flavours is the self-containedness of the scoring logic not needing any H2O.ai server-like infrastructure.
-
-In further posts we will expand on these deployment patterns so here is a list of them in no particular order:
-
-* Bash-like file->file stand-alone scoring invokable on an operating system process level operable by UNIX(-like) system admin tools like Cron
-* Batch scoring of data within a database (RDBMS, Hadoop, NoSQL, …)
-* Micro Service spanning across several different implementations of a self-hosted (RESTful) service with JSON/binary content both on-premise and cloud
-* Automated deployment to one of the scalable cloud services like AWS Lambda
-* Tight code-level integration with the ML models by embedding the scoring logic using runtime libraries decoupled from the actual model being served as run-time dependency in form of a data file
-* (Near) real-time scoring with stream processing systems like Kafka or Flink
-* Spark Pipelines deployment utilising H2O.ai models as native Spark pipelines operating on Spark data structures
-
->>>>>>> Edited Bringing the Model to Production.
 ![Bringing the Model to Production](./images/04_model_deployment.png)
 
 ## External Limitations and Restrictions
